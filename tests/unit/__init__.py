@@ -17,6 +17,7 @@ def create_response(status, fixture=None):
             fixture_path = os.path.join(FIXTURES, fixture)
             response.content = open(fixture_path).read()
         return response
+
     return request
 
 
@@ -31,6 +32,7 @@ def local_response(**params):
         response.content = json.dumps(reply)
         response.status_code = 200
         return response
+
     return _call
 
 
@@ -42,7 +44,8 @@ def mock_response(content, status_code=200, encoding='utf-8', headers=None):
             'x-ratelimit-reset': 1427932858
         }
     return Mock(
-        content=content, status_code=status_code, encoding=encoding, headers=headers)
+        content=content, status_code=status_code, encoding=encoding,
+        headers=headers)
 
 
 def get_user(email="bob@example.com", name="Joe Schmoe"):
@@ -50,6 +53,98 @@ def get_user(email="bob@example.com", name="Joe Schmoe"):
         "type": "user",
         "id": "aaaaaaaaaaaaaaaaaaaaaaaa",
         "user_id": 'id-from-customers-app',
+        "email": email,
+        "name": name,
+        "avatar": {
+            "type": "avatar",
+            "image_url": "https://graph.facebook.com/1/picture?width=24&height=24"
+        },
+        "app_id": "the-app-id",
+        "created_at": 1323422442,
+        "custom_attributes": {"a": "b", "b": 2},
+        "companies": {
+            "type": "company.list",
+            "companies": [
+                {
+                    "type": "company",
+                    "company_id": "123",
+                    "id": "bbbbbbbbbbbbbbbbbbbbbbbb",
+                    "app_id": "the-app-id",
+                    "name": "Company 1",
+                    "remote_created_at": 1390936440,
+                    "created_at": 1401970114,
+                    "updated_at": 1401970114,
+                    "last_request_at": 1401970113,
+                    "monthly_spend": 0,
+                    "session_count": 0,
+                    "user_count": 1,
+                    "tag_ids": [],
+                    "custom_attributes": {
+                        "category": "Tech"
+                    }
+                }
+            ]
+        },
+        "session_count": 123,
+        "unsubscribed_from_emails": True,
+        "last_request_at": 1401970113,
+        "created_at": 1401970114,
+        "remote_created_at": 1393613864,
+        "updated_at": 1401970114,
+        "user_agent_data": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11",
+        "social_profiles": {
+            "type": "social_profile.list",
+            "social_profiles": [
+                {
+                    "type": "social_profile",
+                    "name": "twitter",
+                    "url": "http://twitter.com/abc",
+                    "username": "abc",
+                    "id": None
+                },
+                {
+                    "type": "social_profile",
+                    "name": "twitter",
+                    "username": "abc2",
+                    "url": "http://twitter.com/abc2",
+                    "id": None
+                },
+                {
+                    "type": "social_profile",
+                    "name": "facebook",
+                    "url": "http://facebook.com/abc",
+                    "username": "abc",
+                    "id": "1234242"
+                },
+                {
+                    "type": "social_profile",
+                    "name": "quora",
+                    "url": "http://facebook.com/abc",
+                    "username": "abc",
+                    "id": "1234242"
+                }
+            ]
+        },
+        "location_data": {
+            "type": "location_data",
+            "city_name": 'Dublin',
+            "continent_code": 'EU',
+            "country_name": 'Ireland',
+            "latitude": '90',
+            "longitude": '10',
+            "postal_code": 'IE',
+            "region_name": 'Europe',
+            "timezone": '+1000',
+            "country_code": "IRL"
+        }
+    }
+
+
+def get_contact(email="bob@example.com", name="Joe Schmoe"):
+    return {
+        "type": "contact",
+        "id": "aaaaaaaaaaaaaaaaaaaaaaaa",
+        "external_id": 'id-from-customers-app',
         "email": email,
         "name": name,
         "avatar": {
@@ -192,7 +287,30 @@ def page_of_users(include_next_link=False):
         "total_count": 314
     }
     if include_next_link:
-        page["pages"]["next"] = "https://api.intercom.io/users?per_page=50&page=2"
+        page["pages"][
+            "next"] = "https://api.intercom.io/users?per_page=50&page=2"
+    return page
+
+
+def page_of_contacts(include_next_link=False):
+    page = {
+        "type": "contact.list",
+        "pages": {
+            "type": "pages",
+            "page": 1,
+            "next": None,
+            "per_page": 50,
+            "total_pages": 7
+        },
+        "contacts": [
+            get_contact("user1@example.com"),
+            get_contact("user2@example.com"),
+            get_contact("user3@example.com")],
+        "total_count": 314
+    }
+    if include_next_link:
+        page["pages"][
+            "next"] = "https://api.intercom.io/contacts?per_page=50&page=2"
     return page
 
 
@@ -225,7 +343,8 @@ def page_of_events(include_next_link=False):
             get_event("bought-sub")],
     }
     if include_next_link:
-        page["pages"]["next"] = "https://api.intercom.io/events?type=user&intercom_user_id=55a3b&before=144474756550"  # noqa
+        page["pages"][
+            "next"] = "https://api.intercom.io/events?type=user&intercom_user_id=55a3b&before=144474756550"  # noqa
     return page
 
 
@@ -247,7 +366,8 @@ def page_of_companies(include_next_link=False):
         "total_count": 3
     }
     if include_next_link:
-        page["pages"]["next"] = "https://api.intercom.io/companies?per_page=50&page=2"
+        page["pages"][
+            "next"] = "https://api.intercom.io/companies?per_page=50&page=2"
     return page
 
 
@@ -267,7 +387,8 @@ test_subscription = {
     "app_id": "3qmk5gyg",
     "url": "http://example.com",
     "self": "https://api.intercom.io/subscriptions/nsub_123456789",
-    "topics": ["user.created", "conversation.user.replied", "conversation.admin.replied"],
+    "topics": ["user.created", "conversation.user.replied",
+               "conversation.admin.replied"],
     "active": True,
     "metadata": {},
     "hub_secret": None,
