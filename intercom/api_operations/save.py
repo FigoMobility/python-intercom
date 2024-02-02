@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """Operation to create or save an instance of a particular resource."""
 
-from tkinter import E
-
 from intercom import utils
 
 

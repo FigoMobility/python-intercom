@@ -8,7 +8,7 @@ from .errors import (ArgumentError, AuthenticationError, BadGatewayError,
                      ServiceUnavailableError, TokenUnauthorizedError,
                      UnexpectedError)
 
-__version__ = '3.1.0'
+__version__ = '3.1.1'
 
 
 RELATED_DOCS_TEXT = "See https://github.com/jkeyes/python-intercom \
