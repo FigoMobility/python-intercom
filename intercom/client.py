@@ -5,9 +5,9 @@ import requests
 
 class Client(object):
 
-    def __init__(self, personal_access_token='my_personal_access_token'):
+    def __init__(self, personal_access_token='my_personal_access_token', eu_api = False):
         self.personal_access_token = personal_access_token
-        self.base_url = 'https://api.intercom.io'
+        self.base_url = 'https://api.eu.intercom.io' if eu_api else 'https://api.intercom.io'
         self.rate_limit_details = {}
         self.http_session = requests.Session()
 
